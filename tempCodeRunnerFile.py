@@ -1,2 +1,2 @@
-for d in test:
-#     print(d.)
+for score in sorted_scores:
+    print(score)
