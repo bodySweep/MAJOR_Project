@@ -1,5 +1,6 @@
 import requests
 import networkx as nx
+import wikipediaapi
 
 from bs4 import BeautifulSoup
 headers = {
@@ -14,6 +15,8 @@ fix = "https://en.wikipedia.org"
 url = "https://en.wikipedia.org/wiki/Delhi"
 req = requests.get(url, headers)
 soup = BeautifulSoup(req.content, 'html.parser')
+
+wiki = wikipediaapi.Wikipedia('en')
 
 a_tags = soup.find_all("a", href=True)
 links = []
@@ -33,12 +36,14 @@ for link in cleaned_links:
         cleaned_links.remove(link)
 
 def_urls = []
+summary_titles=[]
 page_details = []
 
 for link in cleaned_links:
     if(link[0:6] == "/wiki/"):
         url_temp = fix + link
         def_urls.append(url_temp)
+        summary_titles.append(link[6:])
     else:
         extra_links.append(link)
         cleaned_links.remove(link)
@@ -52,52 +57,52 @@ for link in cleaned_links:
 
 #   PAGERANK
 
-G = nx.barabasi_albert_graph(len(def_urls),76)
-pr = nx.pagerank(G,0.4)
-pr_values = list(pr.values())
-dic = {}
-for i in range(len(def_urls)):
-    dic[def_urls[i]]=pr_values[i]
+# G = nx.barabasi_albert_graph(len(def_urls),76)
+# pr = nx.pagerank(G,0.4)
+# pr_values = list(pr.values())
+# dic = {}
+# for i in range(len(def_urls)):
+#     dic[def_urls[i]]=pr_values[i]
 
-dic = dict(sorted(dic.items(), key=lambda item: item[1]))
-# print(dic)
+# dic = dict(sorted(dic.items(), key=lambda item: item[1]))
+# # print(dic)
 
-sorted_scores = []
+# sorted_scores = []
 
-for link,pr_score in dic.items():
-    t = []
-    t.append(pr_score)
-    t.append(link)
-    sorted_scores.append(t)
+# for link,pr_score in dic.items():
+#     t = []
+#     t.append(pr_score)
+#     t.append(link)
+#     sorted_scores.append(t)
 
-sorted_scores.sort()
-sorted_scores.reverse()
-# for score in sorted_scores:
-#     print(score)
+# sorted_scores.sort()
+# sorted_scores.reverse()
+# # for score in sorted_scores:
+# #     print(score)
 
-count = len(sorted_scores)//20
+# count = len(sorted_scores)//20
 
 
-test_links=[]
-for i in range(count):
-    test_links.append(sorted_scores[i])
+# test_links=[]
+# for i in range(count):
+#     test_links.append(sorted_scores[i])
 
 # print(test_links)
 
 # for u in test_links:
 #     print(u)
 
-test_def = {}
+# test_def = {}
 
-for i in range(count):
-    req_test = requests.get(test_links[i][1], headers)
-    soup_test = BeautifulSoup(req_test.content, 'html.parser')
-    test_def[test_links[i][1]] = soup_test.find("div",{"id":"mw-content-text"})
+# for i in range(count):
+#     req_test = requests.get(test_links[i][1], headers)
+#     soup_test = BeautifulSoup(req_test.content, 'html.parser')
+#     test_def[test_links[i][1]] = soup_test.find("div",{"id":"mw-content-text"})
     
-for link,definition in test_def.items():
-    temp = []
-    temp.append(dic[link])
-    temp.append(definition.find('p').text)
-    test_def[link] = temp
+# for link,definition in test_def.items():
+#     print(link)
+#     temp = []
+#     temp.append(dic[link])
+#     test_def[link] = temp
 
-print(test_def)
+# print(test_def)

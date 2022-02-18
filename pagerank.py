@@ -1,6 +1,5 @@
 import requests
 import networkx as nx
-import wikipediaapi
 
 from bs4 import BeautifulSoup
 headers = {
@@ -15,8 +14,6 @@ fix = "https://en.wikipedia.org"
 url = "https://en.wikipedia.org/wiki/Delhi"
 req = requests.get(url, headers)
 soup = BeautifulSoup(req.content, 'html.parser')
-
-wiki = wikipediaapi.Wikipedia('en')
 
 a_tags = soup.find_all("a", href=True)
 links = []
