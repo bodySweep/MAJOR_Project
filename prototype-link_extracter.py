@@ -1,6 +1,5 @@
 import requests
 import networkx as nx
-import wikipediaapi
 
 from bs4 import BeautifulSoup
 headers = {
@@ -12,11 +11,9 @@ headers = {
     }
 
 fix = "https://en.wikipedia.org" 
-url = "https://en.wikipedia.org/wiki/Delhi"
+url = "https://en.wikipedia.org/wiki/Cricket"
 req = requests.get(url, headers)
 soup = BeautifulSoup(req.content, 'html.parser')
-
-wiki = wikipediaapi.Wikipedia('en')
 
 a_tags = soup.find_all("a", href=True)
 links = []
@@ -36,14 +33,12 @@ for link in cleaned_links:
         cleaned_links.remove(link)
 
 def_urls = []
-summary_titles={}
 page_details = []
 
 for link in cleaned_links:
     if(link[0:6] == "/wiki/"):
         url_temp = fix + link
         def_urls.append(url_temp)
-        summary_titles[url_temp] = link[6:]
     else:
         extra_links.append(link)
         cleaned_links.remove(link)
@@ -73,7 +68,6 @@ for link,pr_score in dic.items():
     t = []
     t.append(pr_score)
     t.append(link)
-    t.append(summary_titles[link])
     sorted_scores.append(t)
 
 sorted_scores.sort()
@@ -81,7 +75,7 @@ sorted_scores.reverse()
 # for score in sorted_scores:
 #     print(score)
 
-count = len(sorted_scores)//20
+count = len(sorted_scores)//100
 
 
 test_links=[]
@@ -95,21 +89,21 @@ for i in range(count):
 
 test_def = {}
 
-# for i in range(count):
-#     req_test = requests.get(test_links[i][1], headers)
-#     soup_test = BeautifulSoup(req_test.content, 'html.parser')
-#     test_def[test_links[i][1]] = soup_test.find("div",{"id":"mw-content-text"})
-    
-# for link,definition in test_def.items():
-#     print(link)
-#     temp = []
-#     temp.append(dic[link])
-#     test_def[link] = temp
-
 for i in range(count):
-    page_wiki = wiki.page(test_links[i][2])
-    test_def[test_links[i][1]] = page_wiki.summary;
+    req_test = requests.get(test_links[i][1], headers)
+    soup_test = BeautifulSoup(req_test.content, 'html.parser')
+    test_def[test_links[i][1]] = soup_test.find("div",{"id":"mw-content-text"})
+    
+for link,definition in test_def.items():
+    temp = []
+    temp.append(dic[link])
+    temp.append(definition.find('p').text)
+    test_def[link] = temp
 
-for link,defi in test_def.items():
-    print(link ,":", defi)
-    print()
+li = list(test_def.keys())
+for item in li:
+    print(item)
+    print("DEF")
+    print(test_def[str(item)])
+
+# print(test_def)

@@ -132,12 +132,9 @@ for link_tag in link_tags:
 
 out_read=''
 paras = soup.find_all("p")
-print(len(paras))
 for para in paras:
     p_string=para.text;
     for key, value in dic.items():
-        if(key not in test_def.keys()):
-            continue
         title=key
         href=value
         href = fix+href
