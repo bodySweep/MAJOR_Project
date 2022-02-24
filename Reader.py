@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 import time
 
-url = "https://en.wikipedia.org/wiki/Cricket"
+url = "https://en.wikipedia.org/wiki/Delhi"
 html_content = requests.get(url).text
 soup = bs(html_content, 'html.parser')
 
@@ -31,23 +31,23 @@ list_of_links = []
 for item in links:
     list_of_links.append(item.string)
 
-# for item in list_of_links:
-#     print(item)
+for item in list_of_links:
+    print(item)
 
 replace_text = " this is the definition"
 text = para.get_text()
 
-# print(len(text))
-# print(text)
+print(len(text))
+print(text)
 
 
 
 
 
 
-# for link in links:
-#     text = text.replace(link.string, link.string+replace_text, 1)
-# print(text)
+for link in links:
+    text = text.replace(link.string, link.string+replace_text, 1)
+print(text)
 # engine.say(text)
 # engine.runAndWait()
 

@@ -1,2 +1,2 @@
-for score in sorted_scores:
-    print(score)
+print(len(text))
+print(text)
