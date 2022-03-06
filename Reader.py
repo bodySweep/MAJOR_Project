@@ -17,21 +17,33 @@ engine.setProperty('rate', 150)
 # print(result)
 
 paras = soup.find_all("p")
+main_para = []
 for para in paras:
-    print(para)
-    print()
+    if len(para.get_text()) > 50:
+        # engine.say(para.get_text())
+        main_para.append(para)
 
+# print(main_para[0])
+para = main_para[0]
+links = main_para[0].find_all("a", href=True)
 
-# replace_text = " this is the definition"
-# text = para.get_text()
+list_of_links = []
+for item in links:
+    print(item)
+    list_of_links.append(item.string)
+
+for item in list_of_links:
+    print(item)
+
+replace_text = " this is the definition"
+text = para.get_text()
 
 # print(len(text))
 # print(text)
 
-
-# for link in links:
-#     text = text.replace(link.string, link.string+replace_text, 1)
-# print(text)
+for link in links:
+    text = text.replace(link.string, link.string+replace_text, 1)
+print(text)
 # engine.say(text)
 # engine.runAndWait()
 
