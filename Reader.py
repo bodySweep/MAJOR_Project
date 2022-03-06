@@ -2,6 +2,10 @@ import pyttsx3
 from bs4 import BeautifulSoup as bs
 import requests
 import time
+from prototype_link_extracter import link_extractor
+
+def_dict = link_extractor("https://en.wikipedia.org/wiki/Delhi")
+print(def_dict)
 
 url = "https://en.wikipedia.org/wiki/Delhi"
 html_content = requests.get(url).text
