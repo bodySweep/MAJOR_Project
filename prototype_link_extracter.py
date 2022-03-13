@@ -3,8 +3,16 @@ import requests
 import networkx as nx
 import wikipediaapi
 from nltk.tokenize import sent_tokenize
+from pysummarization.nlpbase.auto_abstractor import AutoAbstractor
+from pysummarization.tokenizabledoc.simple_tokenizer import SimpleTokenizer
+from pysummarization.abstractabledoc.top_n_rank_abstractor import TopNRankAbstractor
 
 from bs4 import BeautifulSoup
+
+auto_abstractor = AutoAbstractor()
+auto_abstractor.tokenizable_doc = SimpleTokenizer()
+auto_abstractor.delimiter_list = [".", "/n"]
+abstractable_doc = TopNRankAbstractor()
 
 def link_extractor(url):
 
@@ -112,6 +120,8 @@ def link_extractor(url):
 
     for i in range(count):
         page_wiki = wiki.page(test_links[i][2])
-        test_def[test_links[i][1]] = sent_tokenize(page_wiki.summary);
+        result_dict = auto_abstractor.summarize(page_wiki.summary, abstractable_doc)
+        # test_def[test_links[i][1]] = sent_tokenize(page_wiki.summary)
+        test_def[test_links[i][1]] = result_dict['summarize_result']
 
     return test_def
